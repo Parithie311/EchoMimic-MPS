@@ -4,6 +4,13 @@
   <img src="images/banner.png" alt="EchoMimic Banner" width="100%">
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" />
+  <img src="https://img.shields.io/badge/Diffusers-HuggingFace-FFD21E?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue?style=for-the-badge" />
+</p>
+
 # EchoMimic-MPS
 
 > AI Talking Avatar Generation
