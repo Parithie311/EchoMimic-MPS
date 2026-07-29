@@ -4,6 +4,9 @@
   <img src="images/banner.png" alt="EchoMimic Banner" width="100%">
 </p>
 
+# EchoMimic-MPS
+
+> AI Talking Avatar Generation
 > Apple Silicon (MPS) compatibility layer for EchoMimic with dynamic device selection and macOS support.
 
 ---
