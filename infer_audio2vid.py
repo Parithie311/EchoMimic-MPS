@@ -107,16 +107,20 @@ def main():
 
     ############# model_init started #############
 
+    print("Selected device:", device)
+    print("MPS available:", torch.backends.mps.is_available())
+    print("Torch version:", torch.__version__)
+
     ## vae init
     vae = AutoencoderKL.from_pretrained(
         config.pretrained_vae_path,
-    ).to("cuda", dtype=weight_dtype)
+    ).to(device, dtype=weight_dtype)
 
     ## reference net init
     reference_unet = UNet2DConditionModel.from_pretrained(
         config.pretrained_base_model_path,
         subfolder="unet",
-    ).to(dtype=weight_dtype, device=device)
+    ).to(dtype=weight_dtype, device="cpu")
     reference_unet.load_state_dict(
         torch.load(config.reference_unet_path, map_location="cpu"),
     )
@@ -129,7 +133,7 @@ def main():
             config.motion_module_path,
             subfolder="unet",
             unet_additional_kwargs=infer_config.unet_additional_kwargs,
-        ).to(dtype=weight_dtype, device=device)
+        ).to(dtype=weight_dtype, device="cpu")
     else:
         ### only stage1
         denoising_unet = EchoUNet3DConditionModel.from_pretrained_2d(
@@ -141,7 +145,7 @@ def main():
                 "unet_use_temporal_attention": False,
                 "cross_attention_dim": infer_config.unet_additional_kwargs.cross_attention_dim
             }
-        ).to(dtype=weight_dtype, device=device)
+        ).to(dtype=weight_dtype, device="cpu")
     denoising_unet.load_state_dict(
         torch.load(config.denoising_unet_path, map_location="cpu"),
         strict=False
@@ -149,15 +153,15 @@ def main():
 
     ## face locator init
     face_locator = FaceLocator(320, conditioning_channels=1, block_out_channels=(16, 32, 96, 256)).to(
-        dtype=weight_dtype, device="cuda"
+        dtype=weight_dtype, device="cpu"
     )
-    face_locator.load_state_dict(torch.load(config.face_locator_path))
+    face_locator.load_state_dict(torch.load(config.face_locator_path, map_location=device))
 
     ### load audio processor params
-    audio_processor = load_audio_model(model_path=config.audio_model_path, device=device)
+    audio_processor = load_audio_model(model_path=config.audio_model_path, device="cpu")
 
     ### load face detector params
-    face_detector = MTCNN(image_size=320, margin=0, min_face_size=20, thresholds=[0.6, 0.7, 0.7], factor=0.709, post_process=True, device=device)
+    face_detector = MTCNN(image_size=320, margin=0, min_face_size=20, thresholds=[0.6, 0.7, 0.7], factor=0.709, post_process=True, device="cpu")
 
     ############# model_init finished #############
 
@@ -173,7 +177,7 @@ def main():
         face_locator=face_locator,
         scheduler=scheduler,
     )
-    pipe = pipe.to("cuda", dtype=weight_dtype)
+    pipe = pipe.to(device, dtype=weight_dtype)
 
     date_str = datetime.now().strftime("%Y%m%d")
     time_str = datetime.now().strftime("%H%M")
@@ -220,7 +224,7 @@ def main():
                 face_mask = cv2.resize(face_mask, (args.W, args.H))
 
             ref_image_pil = Image.fromarray(face_img[:, :, [2, 1, 0]])
-            face_mask_tensor = torch.Tensor(face_mask).to(dtype=weight_dtype, device="cuda").unsqueeze(0).unsqueeze(0).unsqueeze(0) / 255.0
+            face_mask_tensor = torch.Tensor(face_mask).to(dtype=weight_dtype, device="cpu").unsqueeze(0).unsqueeze(0).unsqueeze(0) / 255.0
 
             video = pipe(
                 ref_image_pil,

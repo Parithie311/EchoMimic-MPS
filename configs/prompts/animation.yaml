@@ -11,17 +11,9 @@ motion_module_path: "./pretrained_weights/motion_module.pth"
 
 ## deonise model configs
 inference_config: "./configs/inference/inference_v2.yaml"
-weight_dtype: 'fp16'
+weight_dtype: "fp32"
 
 ## test cases
 test_cases:
-  "./assets/test_imgs/a.png":
-    - "./assets/test_audios/echomimic_en.wav"
-  "./assets/test_imgs/b.png":
-    - "./assets/test_audios/echomimic_en_girl.wav"
-  "./assets/test_imgs/c.png":
-    - "./assets/test_audios/echomimic_en_girl.wav"
-  "./assets/test_imgs/d.png":
-    - "./assets/test_audios/echomimic_en_girl.wav"
-  "./assets/test_imgs/e.png":
-    - "./assets/test_audios/echomimic_en.wav"
+  "./assets/my_avatar/8118C354-8353-4A25-A59F-944064C26830_1_105_c.jpeg":
+    - "./assets/my_avatar/watermello-cinematic-inspiration-477123.mp3"

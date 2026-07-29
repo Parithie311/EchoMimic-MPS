@@ -67,7 +67,7 @@ infer_config = OmegaConf.load(inference_config_path)
 
 ############# model_init started #############
 ## vae init
-vae = AutoencoderKL.from_pretrained(config.pretrained_vae_path).to("cuda", dtype=weight_dtype)
+vae = AutoencoderKL.from_pretrained(config.pretrained_vae_path).to(device, dtype=weight_dtype)
 
 ## reference net init
 reference_unet = UNet2DConditionModel.from_pretrained(
@@ -101,8 +101,9 @@ else:
 denoising_unet.load_state_dict(torch.load(config.denoising_unet_path, map_location="cpu"), strict=False)
 
 ## face locator init
-face_locator = FaceLocator(320, conditioning_channels=1, block_out_channels=(16, 32, 96, 256)).to(dtype=weight_dtype, device="cuda")
-face_locator.load_state_dict(torch.load(config.face_locator_path))
+face_locator = FaceLocator(320, conditioning_channels=1, block_out_channels=(16, 32, 96, 256)).to(dtype=weight_dtype, device=device)
+face_locator.load_state_dict(torch.load(config.face_locator_path, map_location=device))
+
 
 ## load audio processor params
 audio_processor = load_audio_model(model_path=config.audio_model_path, device=device)
@@ -122,7 +123,7 @@ pipe = Audio2VideoPipeline(
     audio_guider=audio_processor,
     face_locator=face_locator,
     scheduler=scheduler,
-).to("cuda", dtype=weight_dtype)
+).to("mps", dtype=weight_dtype)
 
 def select_face(det_bboxes, probs):
     ## max face from faces that the prob is above 0.8
@@ -170,7 +171,7 @@ def process_video(uploaded_img, uploaded_audio, width, height, length, seed, fac
         face_mask = cv2.resize(face_mask, (width, height))
 
     ref_image_pil = Image.fromarray(face_img[:, :, [2, 1, 0]])
-    face_mask_tensor = torch.Tensor(face_mask).to(dtype=weight_dtype, device="cuda").unsqueeze(0).unsqueeze(0).unsqueeze(0) / 255.0
+    face_mask_tensor = torch.Tensor(face_mask).to("mps", dtype=weight_dtype, device="cuda").unsqueeze(0).unsqueeze(0).unsqueeze(0) / 255.0
     
     video = pipe(
         ref_image_pil,
@@ -262,8 +263,6 @@ parser.add_argument('--server_name', type=str, default='0.0.0.0', help='Server n
 parser.add_argument('--server_port', type=int, default=7680, help='Server port')
 args = parser.parse_args()
 
-# demo.launch(server_name=args.server_name, server_port=args.server_port, inbrowser=True)
 
 if __name__ == '__main__':
-    #demo.launch(server_name='0.0.0.0')
-    demo.launch(server_name=args.server_name, server_port=args.server_port, inbrowser=True)
+    demo.launch(server_name="127.0.0.1", server_port=7680, inbrowser=True)

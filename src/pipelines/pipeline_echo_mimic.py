@@ -417,6 +417,7 @@ class Audio2VideoPipeline(DiffusionPipeline):
             generator
         )
         # print(video_length, latents.shape)
+        face_mask_tensor = face_mask_tensor.to(self.device)
         c_face_locator_tensor = self.face_locator(face_mask_tensor)
         uc_face_locator_tensor = torch.zeros_like(c_face_locator_tensor)
         face_locator_tensor = torch.cat([uc_face_locator_tensor, c_face_locator_tensor], dim=0)
