@@ -1,5 +1,9 @@
 # EchoMimic-MPS
 
+<p align="center">
+  <img src="images/banner.png" alt="EchoMimic Banner" width="100%">
+</p>
+
 > Apple Silicon (MPS) compatibility layer for EchoMimic with dynamic device selection and macOS support.
 
 ---
