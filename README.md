@@ -20,9 +20,15 @@
 
 ## Overview
 
-EchoMimic-MPS is an adaptation of the original EchoMimic project that enables inference on Apple Silicon Macs using Metal Performance Shaders (MPS).
+## 🚀 Project Highlights
 
-The goal of this repository is to make the project executable on macOS by replacing CUDA-specific operations with device-aware implementations while preserving the original inference pipeline.
+- 🎙️ Generate realistic talking avatars from a single image and speech audio.
+- 🧠 Diffusion-based facial animation pipeline.
+- 🖼️ Supports custom portrait images.
+- 🎵 Supports custom speech audio.
+- ⚙️ Dynamic device selection (CUDA, MPS, CPU).
+- 🌐 Interactive Gradio Web Interface.
+- 🔧 Cross-platform compatibility improvements.
 
 ---
 
