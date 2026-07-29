@@ -48,6 +48,14 @@ https://arxiv.org/abs/2407.08136
 
 This repository contains engineering modifications required to execute EchoMimic on Apple Silicon.
 
+
+## 🎥 Demo
+
+> **Coming Soon**
+
+A demo GIF and sample output videos will be added to showcase the complete talking avatar generation pipeline.
+
+
 ### Device Support
 
 - Added Apple Silicon (MPS) support
