@@ -93,19 +93,19 @@ A demo GIF and sample output videos will be added to showcase the complete talki
 
 ---
 
-# Repository Structure
 
-```text
-EchoMimic-MPS
-│
-├── assets/
-├── configs/
-├── pretrained_weights/
-├── src/
-├── infer_audio2vid.py
-├── webgui.py
-├── README.md
-└── requirements.txt
+
+## 🏗️ Architecture
+
+<p align="center">
+  <img src="images/architecture.png" alt="EchoMimic-MPS Architecture" width="100%">
+</p>
+
+<p align="center">
+  End-to-end AI talking avatar generation pipeline showing image encoding, audio processing, feature fusion, diffusion inference, and cross-platform execution.
+</p>
+
+---
 ```
 
 ---
