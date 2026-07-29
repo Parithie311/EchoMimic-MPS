@@ -108,15 +108,7 @@ A demo GIF and sample output videos will be added to showcase the complete talki
 ---
 ```
 
----
 
-# Running
-
-```bash
-python infer_audio2vid.py --device mps
-```
-
----
 
 # Tested Environment
 
